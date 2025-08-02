@@ -1,0 +1,22 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Spin & Win</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="wheelCanvas" width="500" height="500"></canvas>
+  <form id="winnerForm" style="display:none;">
+    <h2>Congratulations!</h2>
+    <input name="name"    required placeholder="Your Name">
+    <input name="email"   type="email" required placeholder="Email">
+    <input name="phone"   required placeholder="Phone Number">
+    <input name="prize"   readonly id="prizeField">
+    <button type="submit">Submit</button>
+  </form>
+  <script src="Winwheel.min.js"></script>
+  <script src="wheel.js"></script>
+</body>
+</html>
