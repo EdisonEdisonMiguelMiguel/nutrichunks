@@ -1,44 +1,15 @@
+## 1. index.html
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Free Spin & Win</title>
-  <!-- Inline basic layout/CSS -->
-  <style>
-    body { 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      font-family: sans-serif; 
-      padding: 2rem; 
-    }
-    #wheelCanvas { cursor: pointer; border: 2px solid #333; border-radius: 50%; }
-    #winnerForm {
-      display: none;
-      margin-top: 1rem;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 300px;
-      box-shadow: 0 2px 4px rgba(0,0,0,.1);
-    }
-    #winnerForm input {
-      width: 100%;
-      padding: .5rem;
-      margin: .5rem 0;
-      box-sizing: border-box;
-    }
-    #winnerForm button {
-      width: 100%;
-      padding: .5rem;
-      margin-top: .5rem;
-      cursor: pointer;
-    }
-  </style>
+  <title>Spin & Win</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <h1>🎉 Spin & Win!</h1>
+
   <canvas id="wheelCanvas" width="400" height="400"></canvas>
 
   <form id="winnerForm">
@@ -50,71 +21,11 @@
     <button type="submit">Claim Prize</button>
   </form>
 
-  <!-- Winwheel.js from CDN -->
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/javascript-winwheel@2.7.0/Winwheel.js"></script>
-  <!-- If you need the TweenMax animation helper, also include: -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
 
-  <script>
-    // initialize the wheel
-    let wheel = new Winwheel({
-      canvasId: 'wheelCanvas',
-      numSegments: 6,
-      segments: [
-        { fillStyle: '#eae56f', text: 'Prize A' },
-        { fillStyle: '#89f26e', text: 'Prize B' },
-        { fillStyle: '#7de6ef', text: 'Prize C' },
-        { fillStyle: '#e7706f', text: 'Prize D' },
-        { fillStyle: '#eae56f', text: 'Try Again' },
-        { fillStyle: '#89f26e', text: 'Prize E' },
-      ],
-      animation: {
-        type: 'spinToStop',
-        duration: 5,
-        spins: 8,
-        callbackFinished: onSpinComplete
-      }
-    });
-
-    // when canvas is clicked, spin
-    document.getElementById('wheelCanvas').addEventListener('click', () => {
-      wheel.startAnimation();
-    });
-
-    // show the form with the prize
-    function onSpinComplete(limitAngle, segment) {
-      document.getElementById('prizeField').value = segment.text;
-      document.getElementById('winnerForm').style.display = 'block';
-    }
-
-    // submit to your Apps Script webhook
-    document.getElementById('winnerForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const fm = new FormData(e.target);
-      const payload = {
-        name:  fm.get('name'),
-        email: fm.get('email'),
-        phone: fm.get('phone'),
-        prize: fm.get('prize')
-      };
-      try {
-        const res = await fetch('https://script.google.com/macros/s/ABC123/exec', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const json = await res.json();
-        if (json.status === 'OK') {
-          alert('✅ Your prize has been logged. Thanks!');
-          e.target.reset();
-          e.target.style.display = 'none';
-        } else {
-          throw new Error(json.message);
-        }
-      } catch (err) {
-        alert('❌ Error: ' + err.message);
-      }
-    });
-  </script>
+  <!-- Your custom wheel logic -->
+  <script src="wheel.js"></script>
 </body>
 </html>
